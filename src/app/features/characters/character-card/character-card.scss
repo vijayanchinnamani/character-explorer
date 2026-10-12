@@ -1,0 +1,143 @@
+:host {
+  display: block;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container-low);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+a.card:hover,
+a.card:focus-visible {
+  box-shadow: var(--mat-sys-level2);
+  transform: translateY(-2px);
+}
+
+.card.selected {
+  border-color: var(--mat-sys-primary);
+  box-shadow: 0 0 0 2px var(--mat-sys-primary);
+}
+
+.card.disabled {
+  cursor: not-allowed;
+}
+
+.avatar {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--mat-sys-surface-variant);
+}
+
+.body {
+  padding: 12px 16px 16px;
+}
+
+.name {
+  font: var(--mat-sys-title-medium);
+  margin: 0 0 4px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  font: var(--mat-sys-label-large);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #9e9e9e;
+}
+
+.status[data-status='Alive'] .dot {
+  background: #2e9e4f;
+}
+
+.status[data-status='Dead'] .dot {
+  background: #d32f2f;
+}
+
+.facts {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+
+  div {
+    display: flex;
+    gap: 8px;
+  }
+
+  dt {
+    min-width: 72px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.lock {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* List layout: avatar on the left, details on the right. */
+:host(.list) .card {
+  flex-direction: row;
+  align-items: center;
+}
+
+:host(.list) .avatar {
+  width: 96px;
+  height: 96px;
+  flex: none;
+}
+
+:host(.list) .body {
+  flex: 1;
+  padding: 8px 16px;
+}
+
+:host(.list) .facts {
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 24px;
+
+  div {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  dt {
+    min-width: 0;
+    font: var(--mat-sys-label-small);
+  }
+}
+
+:host(.list) .lock {
+  top: 50%;
+  transform: translateY(-50%);
+}

@@ -1,0 +1,35 @@
+<mat-toolbar class="toolbar">
+  <a class="brand" routerLink="/characters" aria-label="Character Explorer home">
+    <mat-icon>science</mat-icon>
+    <span class="brand-text">Character Explorer</span>
+  </a>
+
+  @if (auth.isAuthenticated()) {
+    <label class="search">
+      <mat-icon aria-hidden="true">search</mat-icon>
+      <input
+        type="search"
+        placeholder="Search characters by name"
+        aria-label="Search characters by name"
+        [formControl]="searchControl"
+      />
+      @if (searchControl.value) {
+        <button type="button" class="clear" aria-label="Clear search" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </label>
+
+    <span class="spacer"></span>
+
+    <span class="role-badge" [attr.data-role]="auth.role()">
+      <mat-icon>{{ auth.isAdmin() ? 'admin_panel_settings' : 'visibility' }}</mat-icon>
+      {{ auth.isAdmin() ? 'Admin' : 'Viewer' }}
+    </span>
+    <button mat-stroked-button class="switch-role" type="button" (click)="switchRole()">Switch role</button>
+  }
+</mat-toolbar>
+
+<main>
+  <router-outlet />
+</main>

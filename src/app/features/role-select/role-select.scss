@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.role-select {
+  max-width: 760px;
+  margin: 48px auto;
+  padding: 0 16px;
+  text-align: center;
+}
+
+h1 {
+  font: var(--mat-sys-headline-medium);
+  margin: 0 0 8px;
+}
+
+.subtitle,
+.current {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 16px;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+  text-align: left;
+}
+
+.option-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: var(--mat-sys-primary);
+}
+
+mat-card-actions {
+  padding: 0 16px 16px;
+}

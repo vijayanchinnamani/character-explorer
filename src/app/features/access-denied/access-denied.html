@@ -1,0 +1,18 @@
+<section class="access-denied" role="alert">
+  <mat-icon class="icon">lock</mat-icon>
+  <h1>Access denied</h1>
+  <p>
+    @if (from(); as target) {
+      Your role (<strong>{{ auth.role() === 'admin' ? 'Admin' : 'Viewer' }}</strong>) is not allowed to open
+      <code>{{ target }}</code>.
+    } @else {
+      Your role (<strong>{{ auth.role() === 'admin' ? 'Admin' : 'Viewer' }}</strong>) is not allowed to open this page.
+    }
+  </p>
+  <p class="hint">Character details are available to Admins only. Viewers can browse the character list.</p>
+
+  <div class="actions">
+    <a mat-flat-button routerLink="/characters">Back to characters</a>
+    <a mat-stroked-button routerLink="/role-select">Switch role</a>
+  </div>
+</section>

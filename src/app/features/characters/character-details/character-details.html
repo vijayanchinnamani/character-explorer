@@ -1,0 +1,94 @@
+<section class="character-details">
+  <a
+    mat-button
+    class="back"
+    routerLink="/characters"
+    [queryParams]="{ name: backQuery().name || null, page: backQuery().page > 1 ? backQuery().page : null }"
+  >
+    <mat-icon>arrow_back</mat-icon>
+    Back to characters
+  </a>
+
+  @switch (state().status) {
+    @case ('loading') {
+      <div class="center"><mat-spinner diameter="48" /></div>
+    }
+    @case ('not-found') {
+      <div class="center message" role="alert">
+        <mat-icon>person_off</mat-icon>
+        <p>Character not found.</p>
+      </div>
+    }
+    @case ('error') {
+      <div class="center message" role="alert">
+        <mat-icon>cloud_off</mat-icon>
+        <p>Could not load this character. Please try again.</p>
+        <button mat-flat-button type="button" (click)="retry()">Retry</button>
+      </div>
+    }
+    @case ('ready') {
+      @let data = ready()!;
+      @let character = data.character;
+
+      <header class="profile">
+        <img [src]="character.image" [alt]="'Avatar of ' + character.name" width="160" height="160" />
+        <div>
+          <h1>{{ character.name }}</h1>
+          <p class="status" [attr.data-status]="character.status">
+            <span class="dot"></span>{{ character.status }} · {{ character.species }}
+          </p>
+          <dl class="facts">
+            <div><dt>Gender</dt><dd>{{ character.gender }}</dd></div>
+            <div><dt>Origin</dt><dd>{{ character.origin.name }}</dd></div>
+            <div><dt>Last location</dt><dd>{{ character.location.name }}</dd></div>
+            <div><dt>Episodes</dt><dd>{{ character.episode.length }}</dd></div>
+          </dl>
+        </div>
+      </header>
+
+      <h2>Episodes</h2>
+
+      <mat-form-field appearance="outline" class="filter" subscriptSizing="dynamic">
+        <mat-label>Filter by episode name</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput type="search" [value]="filter()" (input)="onFilter($event)" placeholder="e.g. Pilot" />
+      </mat-form-field>
+
+      <p class="count">
+        Showing {{ filteredEpisodes().length }} of {{ data.episodes.length }} episodes
+      </p>
+
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="filteredEpisodes()" aria-label="Episodes for {{ character.name }}">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>name</th>
+            <td mat-cell *matCellDef="let episode">{{ episode.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="air_date">
+            <th mat-header-cell *matHeaderCellDef>air_date</th>
+            <td mat-cell *matCellDef="let episode">{{ episode.air_date }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="episode">
+            <th mat-header-cell *matHeaderCellDef>episode</th>
+            <td mat-cell *matCellDef="let episode">{{ episode.episode }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+              @if (filter().trim()) {
+                No episodes match “{{ filter().trim() }}”.
+              } @else {
+                This character has no episodes.
+              }
+            </td>
+          </tr>
+        </table>
+      </div>
+    }
+  }
+</section>

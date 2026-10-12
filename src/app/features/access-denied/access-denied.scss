@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.access-denied {
+  max-width: 560px;
+  margin: 64px auto;
+  padding: 32px 24px;
+  text-align: center;
+  border-radius: 16px;
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.icon {
+  font-size: 56px;
+  width: 56px;
+  height: 56px;
+}
+
+h1 {
+  font: var(--mat-sys-headline-medium);
+  margin: 8px 0 16px;
+}
+
+p {
+  margin: 0 0 8px;
+}
+
+code {
+  word-break: break-all;
+}
+
+.hint {
+  opacity: 0.85;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}

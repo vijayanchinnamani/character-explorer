@@ -1,0 +1,56 @@
+<ng-template #content>
+  <img
+    class="avatar"
+    [src]="character().image"
+    [alt]="'Avatar of ' + character().name"
+    width="300"
+    height="300"
+    loading="lazy"
+  />
+
+  <div class="body">
+    <h3 class="name">{{ character().name }}</h3>
+
+    <p class="status" [attr.data-status]="character().status">
+      <span class="dot"></span>{{ character().status }}
+    </p>
+
+    <dl class="facts">
+      <div>
+        <dt>Species</dt>
+        <dd>{{ character().species }}</dd>
+      </div>
+      <div>
+        <dt>Gender</dt>
+        <dd>{{ character().gender }}</dd>
+      </div>
+      <div>
+        <dt>Episodes</dt>
+        <dd>{{ character().episode.length }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  @if (!clickable()) {
+    <mat-icon class="lock" aria-hidden="true">lock</mat-icon>
+  }
+</ng-template>
+
+@if (clickable()) {
+  <a
+    class="card"
+    [class.selected]="selected()"
+    [routerLink]="['/characters', character().id]"
+    [attr.aria-label]="'Open details for ' + character().name"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
+  </a>
+} @else {
+  <div
+    class="card disabled"
+    matTooltip="Character details are available to Admins only"
+    tabindex="0"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
+  </div>
+}

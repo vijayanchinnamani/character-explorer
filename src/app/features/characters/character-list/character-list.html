@@ -1,0 +1,87 @@
+<section class="character-list">
+  <header class="header">
+    <div>
+      <h1>Characters</h1>
+      @if (result(); as ready) {
+        <p class="summary">
+          {{ ready.info.count }} character{{ ready.info.count === 1 ? '' : 's' }}
+          @if (query().name) {
+            matching “{{ query().name }}”
+          }
+        </p>
+      }
+    </div>
+
+    <mat-button-toggle-group
+      aria-label="Choose layout"
+      [value]="viewMode()"
+      (change)="setViewMode($event.value)"
+      hideSingleSelectionIndicator
+    >
+      <mat-button-toggle value="grid" aria-label="Grid view">
+        <mat-icon>grid_view</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="list" aria-label="List view">
+        <mat-icon>view_list</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </header>
+
+  @if (!auth.isAdmin()) {
+    <p class="notice" role="note">
+      <mat-icon>info</mat-icon>
+      You are signed in as a Viewer. You can browse and search characters, but details are Admin-only.
+    </p>
+  }
+
+  @switch (state().status) {
+    @case ('loading') {
+      <div class="center"><mat-spinner diameter="48" /></div>
+    }
+    @case ('error') {
+      <div class="center message" role="alert">
+        <mat-icon>cloud_off</mat-icon>
+        <p>Could not load characters. Please check your connection and try again.</p>
+        <button mat-flat-button type="button" (click)="retry()">Retry</button>
+      </div>
+    }
+    @case ('ready') {
+      @let page = result()!;
+      @if (page.results.length === 0) {
+        <div class="center message">
+          <mat-icon>search_off</mat-icon>
+          @if (query().page > 1) {
+            <p>There are no characters on page {{ query().page }}.</p>
+            <button mat-flat-button type="button" (click)="goToFirstPage()">Go to first page</button>
+          } @else {
+            <p>
+              No characters found@if (query().name) {
+                for “{{ query().name }}”}.
+            </p>
+          }
+        </div>
+      } @else {
+        <div class="characters" [class.grid]="viewMode() === 'grid'" [class.list]="viewMode() === 'list'">
+          @for (character of page.results; track character.id) {
+            <app-character-card
+              [character]="character"
+              [layout]="viewMode()"
+              [clickable]="auth.isAdmin()"
+              [selected]="character.id === selectedId()"
+            />
+          }
+        </div>
+
+        <mat-paginator
+          [length]="page.info.count"
+          [pageSize]="20"
+          [pageIndex]="query().page - 1"
+          [hidePageSize]="true"
+          [showFirstLastButtons]="true"
+          (page)="onPage($event)"
+          aria-label="Select page of characters"
+        />
+      }
+    }
+  }
+</section>
